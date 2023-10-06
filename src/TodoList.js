@@ -4,8 +4,13 @@ import dragula from 'dragula';
 const TodoList = () => {
   const [items, setItems] = useState(() => {
     const savedItems = localStorage.getItem('todoItems');
-    return savedItems ? JSON.parse(savedItems) : ['Task 1', 'Task 2', 'Task 3'];
+    return savedItems ? JSON.parse(savedItems) : [
+      { text: 'Task 1', checked: false },
+      { text: 'Task 2', checked: false },
+      { text: 'Task 3', checked: false }
+    ];
   });
+
   const [newTask, setNewTask] = useState('');
   const [editedTask, setEditedTask] = useState(null);
   const [updatedTask, setUpdatedTask] = useState('');
@@ -45,27 +50,31 @@ const TodoList = () => {
 
   const handleAddTask = () => {
     if (newTask.trim() !== '') {
-      const updatedItems = [...items, newTask];
+      const updatedItems = [...items, { text: newTask, checked: false }];
       setItems(updatedItems);
       saveItemsToLocalStorage(updatedItems);
       setNewTask('');
     }
-  };
+  };  
 
   const handleEditTask = (index) => {
-    setUpdatedTask(items[index]);
+    setUpdatedTask(items[index].text);  // Store the task text for editing
     setEditedTask(index);
     setIsEditing(true); // Enable edit mode
-  };
+  };  
 
   const handleUpdateTask = (index) => {
     const updatedItems = [...items];
-    updatedItems[index] = updatedTask;
+    updatedItems[index] = {
+      ...updatedItems[index],
+      text: updatedTask  // Update the task text
+    };
     setItems(updatedItems);
     saveItemsToLocalStorage(updatedItems);
     setEditedTask(null);
     setIsEditing(false); // Disable edit mode
   };
+  
 
   const handleDeleteTask = (index) => {
     const updatedItems = [...items];
@@ -83,6 +92,16 @@ const TodoList = () => {
 	  	handleUpdateTask(index);
 	  }
   }
+
+  const handleToggleCheckbox = (index) => {
+    const updatedItems = [...items];
+    updatedItems[index] = {
+      ...updatedItems[index],
+      checked: !updatedItems[index].checked
+    };
+    setItems(updatedItems);
+    saveItemsToLocalStorage(updatedItems);
+  };
 
   return (
     <div>
@@ -110,7 +129,14 @@ const TodoList = () => {
             </div>
           ) : (
             <div>
-              {task}
+              <input
+                type="checkbox"
+                checked={task.checked}
+                onChange={() => handleToggleCheckbox(index)}
+              />
+              <span style={{ textDecoration: task.checked ? 'line-through' : 'none' }}>
+                {task.text}
+              </span>
               <button onClick={() => handleEditTask(index)}>Edit</button>
               <button onClick={() => handleDeleteTask(index)}>Delete</button>
             </div>
