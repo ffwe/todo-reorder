@@ -19,7 +19,7 @@ const TodoList = () => {
   const [isEditing, setIsEditing] = useState(false); // Flag to track if in edit mode
 
   useEffect(() => {
-    const containers = document.querySelectorAll('.task-list');
+    const containers = document.querySelectorAll('.task');
     const drake = dragula(Array.from(containers), {
       moves: (el, source, handle, sibling) => {
         // Disable drag during editing
@@ -104,18 +104,19 @@ const TodoList = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className="wrapper">
+      <div className="task-input">
         <input
           type="text"
+          placeholder='입력 후 엔터'
           value={newTask}
           onChange={handleNewTaskChange}
           onKeyDown={(e) => addItemEnter(e.key)}
         />
-        <button onClick={handleAddTask}>Add New Task</button>
+        {/* <button onClick={handleAddTask}><img src="plus-square-icon.svg" alt="plus"/></button> */}
       </div>
       {items.map((task, index) => (
-        <div key={index} className="task-list">
+        <div key={index} className="task">
           {editedTask === index ? (
             <div>
               <input
@@ -125,7 +126,7 @@ const TodoList = () => {
                 onChange={(e) => setUpdatedTask(e.target.value)}
                 onKeyDown={(e) => updateItemEnter(e.key, index)}
               />
-              <button onClick={() => handleUpdateTask(index)}>Done</button>
+              <button onClick={() => handleUpdateTask(index)}><img src="check-mark-box-icon.svg" alt="Done"/></button>
             </div>
           ) : (
             <div>
@@ -137,8 +138,8 @@ const TodoList = () => {
               <span style={{ textDecoration: task.checked ? 'line-through' : 'none' }}>
                 {task.text}
               </span>
-              <button onClick={() => handleEditTask(index)}>Edit</button>
-              <button onClick={() => handleDeleteTask(index)}>Delete</button>
+              <button onClick={() => handleDeleteTask(index)}><img src="trash-can-icon.svg" alt="Delete"/></button>
+              <button onClick={() => handleEditTask(index)}><img src="edit-box-icon.svg" alt="Edit"/></button>
             </div>
           )}
         </div>
