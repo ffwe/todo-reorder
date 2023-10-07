@@ -28,7 +28,7 @@ const TodoList = () => {
     });
 
     drake.on('drop', (el, target, source, sibling) => {
-      // ... (rest of the code for handling drop)
+
     });
 
     return () => {
@@ -115,13 +115,16 @@ const TodoList = () => {
         />
         {/* <button onClick={handleAddTask}><img src="plus-square-icon.svg" alt="plus"/></button> */}
       </div>
+      <div className="task-list">
       {items.map((task, index) => (
-        <div key={index} className="task">
+        <div key={index}
+        className="task">
           {editedTask === index ? (
             <div>
               <input
                 ref={editInputRef}
                 type="text"
+                name="content"
                 value={updatedTask}
                 onChange={(e) => setUpdatedTask(e.target.value)}
                 onKeyDown={(e) => updateItemEnter(e.key, index)}
@@ -135,15 +138,24 @@ const TodoList = () => {
                 checked={task.checked}
                 onChange={() => handleToggleCheckbox(index)}
               />
-              <span style={{ textDecoration: task.checked ? 'line-through' : 'none' }}>
+              <span name="content" style={{ textDecoration: task.checked ? 'line-through' : 'none' }}>
                 {task.text}
               </span>
-              <button onClick={() => handleDeleteTask(index)}><img src="trash-can-icon.svg" alt="Delete"/></button>
-              <button onClick={() => handleEditTask(index)}><img src="edit-box-icon.svg" alt="Edit"/></button>
+              <button
+                  className="ml-2 bg-blue-500 text-white p-2 rounded"
+                  onClick={() => handleEditTask(index)}>
+                  <img src="edit-box-icon.svg" alt="Edit" className="w-4 h-4"/>
+              </button>
+              <button
+                  className="ml-2 bg-red-500 text-white p-2 rounded"
+                  onClick={() => handleDeleteTask(index)}>
+                  <img src="trash-can-icon.svg" alt="Delete" className="w-4 h-4"/>
+              </button>
             </div>
           )}
         </div>
       ))}
+      </div>
     </div>
   );
 };
