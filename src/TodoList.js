@@ -5,9 +5,9 @@ const TodoList = () => {
   const [items, setItems] = useState(() => {
     const savedItems = localStorage.getItem('todoItems');
     return savedItems ? JSON.parse(savedItems) : [
-      { id: 1, text: 'Task 1', checked: false },
-      { id: 2, text: 'Task 2', checked: false },
-      { id: 3, text: 'Task 3', checked: false }
+      { id: '1', text: 'Task 1', checked: false },
+      { id: '2', text: 'Task 2', checked: false },
+      { id: '3', text: 'Task 3', checked: false }
     ];
   });
 
@@ -28,15 +28,13 @@ const TodoList = () => {
         // Get the new order of task IDs based on their positions
         const updatedTaskIds = Array.from(componentBackingInstance.children).map(item => item.dataset.taskId);
   
-        // // Update the items based on the new order
+        // Update the items based on the new order
         const updatedItems = updatedTaskIds.map(taskId => {
-          return items.find(item => item.id === Number(taskId));
+          return [...items].find(item => {
+            return String(item.id) === String(taskId)
+          });
         });
-  
-        // Update the state with the new task order
-        setItems(updatedItems);
-  
-        // Save the updated task order to localStorage
+
         saveItemsToLocalStorage(updatedItems);
       });
     }
@@ -132,7 +130,7 @@ const TodoList = () => {
       </div>
       <div className="task-list mt-4" ref={dragulaDecorator}>
         {items.map((task, index) => (
-          <div key={task.id} className="task items-center justify-between mb-2 p-2 border rounded" data-task-id={task.id}>
+          <div key={task?.id} className="task items-center justify-between mb-2 p-2 border rounded" data-task-id={task?.id}>
             {editedTask === index ? (
               <div className="flex items-center">
                 <input
@@ -141,10 +139,10 @@ const TodoList = () => {
                   name="content"
                   value={updatedTask}
                   onChange={(e) => setUpdatedTask(e.target.value)}
-                  onKeyDown={(e) => updateItemEnter(e.key, task.id)}
+                  onKeyDown={(e) => updateItemEnter(e.key, task?.id)}
                   className="flex-grow p-2 bg-black rounded"
                 />
-                <button onClick={() => handleUpdateTask(task.id)} className="ml-2 bg-blue-500 text-white p-2 rounded">
+                <button onClick={() => handleUpdateTask(task?.id)} className="ml-2 bg-blue-500 text-white p-2 rounded">
                   <img src="check-mark-box-icon.svg" alt="Done" className="w-4 h-4" />
                 </button>
               </div>
@@ -152,22 +150,22 @@ const TodoList = () => {
               <div className="flex">
                 <input
                   type="checkbox"
-                  checked={task.checked}
-                  onChange={() => handleToggleCheckbox(task.id)}
+                  checked={task?.checked}
+                  onChange={() => handleToggleCheckbox(task?.id)}
                   className="mr-2 w-8"
                 />
-                <div name="content" className={ 'w-full '+(task.checked ? 'line-through' : '')}>
-                  {task.text}
+                <div name="content" className={ 'w-full '+(task?.checked ? 'line-through' : '')}>
+                  {task?.text}
                 </div>
                 <button
                   className="ml-2 w-8 bg-blue-500 text-white p-2 rounded"
-                  onClick={() => handleEditTask(task.id)}
+                  onClick={() => handleEditTask(task?.id)}
                 >
                   <img src="edit-box-icon.svg" alt="Edit" className="w-4 h-4" />
                 </button>
                 <button
                   className="ml-2 w-8 bg-red-500 text-white p-2 rounded"
-                  onClick={() => handleDeleteTask(task.id)}
+                  onClick={() => handleDeleteTask(task?.id)}
                 >
                   <img src="trash-can-icon.svg" alt="Delete" className="w-4 h-4" />
                 </button>
