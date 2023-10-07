@@ -24,8 +24,20 @@ const TodoList = () => {
     if (componentBackingInstance) {
       let options = {};
       const drake = dragula([componentBackingInstance], options);
-      drake.on('drop', (el, target, source, sibling) => {
-        // Handle drop here
+      drake.on('drop', () => {
+        // Get the new order of task IDs based on their positions
+        const updatedTaskIds = Array.from(componentBackingInstance.children).map(item => item.dataset.taskId);
+  
+        // // Update the items based on the new order
+        const updatedItems = updatedTaskIds.map(taskId => {
+          return items.find(item => item.id === Number(taskId));
+        });
+  
+        // Update the state with the new task order
+        setItems(updatedItems);
+  
+        // Save the updated task order to localStorage
+        saveItemsToLocalStorage(updatedItems);
       });
     }
   };
@@ -120,7 +132,7 @@ const TodoList = () => {
       </div>
       <div className="task-list mt-4" ref={dragulaDecorator}>
         {items.map((task, index) => (
-          <div key={task.id} className="task items-center justify-between mb-2 p-2 border rounded">
+          <div key={task.id} className="task items-center justify-between mb-2 p-2 border rounded" data-task-id={task.id}>
             {editedTask === index ? (
               <div className="flex items-center">
                 <input
