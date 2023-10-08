@@ -3,6 +3,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,16 +11,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-html.dark > body{
-  background-color: #000000;
-  color: white;
-}
-
-html.dark input{
-  background-color: #222222;
-  color: white;
-  accent-color: #222222;
 }
 div.task{
   cursor: grab;
@@ -33,4 +24,26 @@ code {
 }
 .gu-mirror{
   display: none;
+}
+
+html.dark {
+  background-color: #181a1b;
+}
+html.dark > body{
+  background-color: #131516;
+  background-color: #131516;
+  color: white;
+}
+
+html.dark input{
+  background-color: #454a4d;
+  color: white;
+  accent-color: #131516;
+  border-color: rgb(54, 59, 61);
+}
+html.dark div.task{
+  border-color: rgb(120, 120, 120);
+}
+html.dark input[type="checkbox"]{
+  color-scheme:dark;
 }
