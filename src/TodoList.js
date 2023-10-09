@@ -4,7 +4,7 @@ import dragula from 'react-dragula';
 const TodoList = () => {
   const [items, setItems] = useState(() => {
     const savedItems = localStorage.getItem('todoItems');
-    return savedItems ? JSON.parse(savedItems) : [
+    return savedItems ? JSON.parse(savedItems).filter(item=>item!==null) : [
       { id: '1', text: 'Task 1', checked: false },
       { id: '2', text: 'Task 2', checked: false },
       { id: '3', text: 'Task 3', checked: false }
@@ -129,7 +129,7 @@ const TodoList = () => {
         </button>
       </div>
       <div className="task-list mt-4" ref={dragulaDecorator}>
-        {items.map((task, index) => (
+        {items.filter(item=>item!==null).map((task, index) => (
           <div key={task?.id} className="task items-center justify-between mb-2 p-2 border rounded" data-task-id={task?.id}>
             {editedTask === index ? (
               <div className="flex items-center">
